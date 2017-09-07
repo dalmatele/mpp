@@ -953,11 +953,18 @@ static void mpi_enc_test_help()
     mpp_show_support_format();
 }
 
+/**
+ * 
+ * @param argc
+ * @param argv
+ * @param cmd
+ * @return 
+ */
 static RK_S32 mpi_enc_test_parse_options(int argc, char **argv, MpiEncTestCmd* cmd)
 {
     const char *opt;
     const char *next;
-    RK_S32 optindex = 1;
+    RK_S32 optindex = 1;//must run from 1 because 0 is name of program
     RK_S32 handleoptions = 1;
     RK_S32 err = MPP_NOK;
 
@@ -968,10 +975,10 @@ static RK_S32 mpi_enc_test_parse_options(int argc, char **argv, MpiEncTestCmd* c
 
     /* parse options */
     while (optindex < argc) {
-        opt  = (const char*)argv[optindex++];
-        next = (const char*)argv[optindex];
+        opt  = (const char*)argv[optindex++];//-i test_file
+        next = (const char*)argv[optindex];//test_file
 
-        if (handleoptions && opt[0] == '-' && opt[1] != '\0') {
+        if (handleoptions && opt[0] == '-' && opt[1] != '\0') {//\0 is null terminator, abbreviated NUL
             if (opt[1] == '-') {
                 if (opt[2] != '\0') {
                     opt++;
@@ -1006,7 +1013,7 @@ static RK_S32 mpi_enc_test_parse_options(int argc, char **argv, MpiEncTestCmd* c
                 break;
             case 'd':
                 if (next) {
-                    cmd->debug = atoi(next);;
+                    cmd->debug = atoi(next);//convert string to int for debug flag
                 } else {
                     mpp_err("invalid debug flag\n");
                     goto PARSE_OPINIONS_OUT;
@@ -1089,6 +1096,32 @@ static void mpi_enc_test_show_options(MpiEncTestCmd* cmd)
     mpp_log("debug flag : %x\n", cmd->debug);
 }
 
+/**
+ * https://stackoverflow.com/questions/4176326/arguments-to-main-in-c
+ * utils: -i  input_file      	input bitstream file
+ * utils: -o  output_file     	output bitstream file, 
+ * utils: -w  width           	the width of input picture
+ * utils: -h  height          	the height of input picture
+ * utils: -f  format          	the format of input picture
+ * utils: -t  type            	output stream coding type
+ * utils: -n  max frame number	max encoding frame number
+ * utils: -d  debug           	debug flag
+ * mpi: mpp coding type support list:
+ * mpi: type: dec id 0 coding: mpeg2            id 2
+ * mpi: type: dec id 0 coding: mpeg4            id 4
+ * mpi: type: dec id 0 coding: h.263            id 3
+ * mpi: type: dec id 0 coding: h.264/AVC        id 7
+ * mpi: type: dec id 0 coding: h.265/HEVC       id 16777220
+ * mpi: type: dec id 0 coding: vp8              id 9
+ * mpi: type: dec id 0 coding: VP9              id 10
+ * mpi: type: dec id 0 coding: avs+             id 16777221
+ * mpi: type: dec id 0 coding: jpeg             id 8
+ * mpi: type: enc id 1 coding: h.264/AVC        id 7
+ * mpi: type: enc id 1 coding: jpeg             id 8
+ * @param argc number of params, include name of program
+ * @param argv the input params, 0 is name of program
+ * @return 
+ */
 int main(int argc, char **argv)
 {
     RK_S32 ret = 0;
