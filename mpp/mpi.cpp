@@ -415,6 +415,12 @@ static MppApi mpp_api = {
     {0},
 };
 
+/**
+ * create some base flow contexts
+ * @param ctx
+ * @param mpi
+ * @return 
+ */
 MPP_RET mpp_create(MppCtx *ctx, MppApi **mpi)
 {
     if (NULL == ctx || NULL == mpi) {
@@ -458,6 +464,13 @@ MPP_RET mpp_create(MppCtx *ctx, MppApi **mpi)
     return ret;
 }
 
+/**
+ * 
+ * @param ctx
+ * @param type
+ * @param coding
+ * @return 
+ */
 MPP_RET mpp_init(MppCtx ctx, MppCtxType type, MppCodingType coding)
 {
     MPP_RET ret = MPP_OK;
@@ -508,6 +521,12 @@ MPP_RET mpp_destroy(MppCtx ctx)
     return ret;
 }
 
+/**
+ * Check support format
+ * @param MppCtxType type of code: encode, decode or isp
+ * @param MppCodingType code to check
+ * @return 
+ */
 MPP_RET mpp_check_support_format(MppCtxType type, MppCodingType coding)
 {
     MPP_RET ret = MPP_NOK;
@@ -536,5 +555,9 @@ void mpp_show_support_format()
                 info->type_name, info->type,
                 info->coding_name, info->coding);
     }
+}
+
+int test_exist(){
+    return 1;
 }
 
