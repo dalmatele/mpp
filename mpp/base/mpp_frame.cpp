@@ -60,11 +60,13 @@ MPP_RET mpp_frame_init(MppFrame *frame)
 
 MPP_RET mpp_frame_deinit(MppFrame *frame)
 {
-    if (NULL == frame || check_is_mpp_frame(*frame)) {
+    MPP_RET ret;
+    ret = check_is_mpp_frame(*frame);
+    if (NULL == frame || ret) {
         mpp_err_f("invalid NULL pointer input\n");
         return MPP_ERR_NULL_PTR;
     }
-
+    mpp_err("mpp_frame_deinit %d", ret);
     MppBuffer buffer = mpp_frame_get_buffer(*frame);
     if (buffer)
         mpp_buffer_put(buffer);
