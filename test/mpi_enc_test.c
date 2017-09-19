@@ -416,12 +416,14 @@ MPP_RET test_res_init(MpiEncTestData *p)
 
     //see mpp_buffer.h
     ret = mpp_buffer_group_get_internal(&p->frm_grp, MPP_BUFFER_TYPE_ION);
+    mpp_log("buffer for frm_grp %d\n", ret);
     if (ret) {
         mpp_err("failed to get buffer group for input frame ret %d\n", ret);
         goto RET;
     }
     //see more about MPP_BUFFER_TYPE_ION in mpp_buffer.cpp
     ret = mpp_buffer_group_get_internal(&p->pkt_grp, MPP_BUFFER_TYPE_ION);
+    mpp_log("buffer for pkt_grp %d\n", ret);
     if (ret) {
         mpp_err("failed to get buffer group for output packet ret %d\n", ret);
         goto RET;
@@ -430,24 +432,28 @@ MPP_RET test_res_init(MpiEncTestData *p)
     for (i = 0; i < MPI_ENC_IO_COUNT; i++) {
         //link frm_buff to frm_grp buffer
         ret = mpp_buffer_get(p->frm_grp, &p->frm_buf[i], p->frame_size);
+        mpp_log("buffer for frm_buf %d\n", ret);
         if (ret) {
             mpp_err("failed to get buffer for input frame ret %d\n", ret);
             goto RET;
         }
 
         ret = mpp_buffer_get(p->frm_grp, &p->osd_idx_buf[i], p->osd_idx_size);
+        mpp_log("buffer for osd_idx_buf %d\n", ret);
         if (ret) {
             mpp_err("failed to get buffer for osd idx buf ret %d\n", ret);
             goto RET;
         }
 
         ret = mpp_buffer_get(p->pkt_grp, &p->pkt_buf[i], p->packet_size);
+        mpp_log("buffer for pkt_grp %d\n", ret);
         if (ret) {
             mpp_err("failed to get buffer for input frame ret %d\n", ret);
             goto RET;
         }
 
         ret = mpp_buffer_get(p->pkt_grp, &p->md_buf[i], p->mdinfo_size);
+        mpp_log("buffer for md_buf %d\n", ret);
         if (ret) {
             mpp_err("failed to get buffer for motion detection info ret %d\n", ret);
             goto RET;
