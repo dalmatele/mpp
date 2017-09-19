@@ -39,6 +39,9 @@
 #define MPI_ENC_TEST_SET_IDR_FRAME  0
 #define MPI_ENC_TEST_SET_OSD        0
 
+/**
+ * To save cmd options
+ */
 typedef struct {
     char            file_input[MAX_FILE_NAME_LENGTH];
     char            file_output[MAX_FILE_NAME_LENGTH];
@@ -123,6 +126,12 @@ static OptionInfo mpi_enc_cmd[] = {
     {"d",               "debug",                "debug flag"},
 };
 
+/**
+ * read each image from input
+ * @param buf
+ * @param p
+ * @return 
+ */
 static MPP_RET read_yuv_image(RK_U8 *buf, MpiEncTestData *p)
 {
     MPP_RET ret = MPP_OK;
@@ -197,6 +206,12 @@ err:
     return ret;
 }
 
+/**
+ *  read <->fill?
+ * @param buf
+ * @param c
+ * @return 
+ */
 static MPP_RET fill_yuv_image(RK_U8 *buf, MpiEncTestData *c)
 {
     MPP_RET ret = MPP_OK;
@@ -294,6 +309,12 @@ static MPP_RET mpi_enc_gen_osd_plt(MppEncOSDPlt *osd_plt, RK_U32 *table)
     return MPP_OK;
 }
 
+/**
+ * init some context
+ * @param data
+ * @param cmd
+ * @return 
+ */
 MPP_RET test_ctx_init(MpiEncTestData **data, MpiEncTestCmd *cmd)
 {
     MpiEncTestData *p = NULL;
@@ -318,7 +339,7 @@ MPP_RET test_ctx_init(MpiEncTestData **data, MpiEncTestCmd *cmd)
     p->ver_stride   = MPP_ALIGN(cmd->height, 16);
     p->fmt          = cmd->format;
     p->type         = cmd->type;
-    p->num_frames   = cmd->num_frames;
+    p->num_frames   = cmd->num_frames;//just a max num frames can be encoded
 
     if (cmd->have_input) {
         p->fp_input = fopen(cmd->file_input, "rb");
@@ -393,19 +414,21 @@ MPP_RET test_res_init(MpiEncTestData *p)
 
     mpp_assert(p);
 
+    //see mpp_buffer.h
     ret = mpp_buffer_group_get_internal(&p->frm_grp, MPP_BUFFER_TYPE_ION);
     if (ret) {
         mpp_err("failed to get buffer group for input frame ret %d\n", ret);
         goto RET;
     }
-
+    //see more about MPP_BUFFER_TYPE_ION in mpp_buffer.cpp
     ret = mpp_buffer_group_get_internal(&p->pkt_grp, MPP_BUFFER_TYPE_ION);
     if (ret) {
         mpp_err("failed to get buffer group for output packet ret %d\n", ret);
         goto RET;
     }
-
+    //see more about buffer group in /doc/design/3.mpp_buffer.txt
     for (i = 0; i < MPI_ENC_IO_COUNT; i++) {
+        //link frm_buff to frm_grp buffer
         ret = mpp_buffer_get(p->frm_grp, &p->frm_buf[i], p->frame_size);
         if (ret) {
             mpp_err("failed to get buffer for input frame ret %d\n", ret);
@@ -475,6 +498,11 @@ MPP_RET test_res_deinit(MpiEncTestData *p)
     return MPP_OK;
 }
 
+/**
+ * Init for MppCtx and MppApi
+ * @param p
+ * @return 
+ */
 MPP_RET test_mpp_init(MpiEncTestData *p)
 {
     MPP_RET ret;
@@ -496,6 +524,11 @@ RET:
     return ret;
 }
 
+/**
+ * init value for some params
+ * @param p
+ * @return 
+ */
 MPP_RET test_mpp_setup(MpiEncTestData *p)
 {
     MPP_RET ret;
@@ -669,7 +702,7 @@ RET:
 }
 
 /*
- * write header here
+ * write header for output file
  */
 MPP_RET test_mpp_preprare(MpiEncTestData *p)
 {
@@ -690,11 +723,15 @@ MPP_RET test_mpp_preprare(MpiEncTestData *p)
     }
 
     /* get and write sps/pps for H.264 */
+    //see more: https://cardinalpeak.com/blog/the-h-264-sequence-parameter-set/
     if (packet) {
-        void *ptr   = mpp_packet_get_pos(packet);
-        size_t len  = mpp_packet_get_length(packet);
+        void *ptr   = mpp_packet_get_pos(packet); //get position of packet
+        size_t len  = mpp_packet_get_length(packet);//get valid data length of packet
 
         if (p->fp_output)
+            //write data is pointed by ptr, has size is 1 byte, we have len item, to file
+            //we write global info to file
+            //see more: https://stackoverflow.com/questions/17541153/how-to-find-sps-and-pps-string-in-h264-codec-from-mp4
             fwrite(ptr, 1, len, p->fp_output);
 
         packet = NULL;
@@ -731,7 +768,7 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
 
     i = 0;
     while (!p->pkt_eos) {
-        MppTask task = NULL;
+        MppTask task = NULL;//hold data for processing
         RK_S32 index = i++;
         MppBuffer frm_buf_in  = p->frm_buf[index];
         MppBuffer pkt_buf_out = p->pkt_buf[index];
@@ -744,7 +781,7 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
             i = 0;
 
         if (p->fp_input) {
-            ret = read_yuv_image(buf, p);
+            ret = read_yuv_image(buf, p);//read data and use buf to point to mem that contains read data, --> frm_buf_in
             if (ret != MPP_OK  || feof(p->fp_input)) {
                 mpp_log("found last frame. feof %d\n", feof(p->fp_input));
                 p->frm_eos = 1;
@@ -759,7 +796,7 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
         mpp_frame_set_eos(p->frame, p->frm_eos);
 
         mpp_packet_init_with_buffer(&packet, pkt_buf_out);
-
+        //see more: mpp/inc/mpp_task.h
         ret = mpi->poll(ctx, MPP_PORT_INPUT, MPP_POLL_BLOCK);
         if (ret) {
             mpp_err("mpp task input poll failed ret %d\n", ret);
@@ -829,7 +866,7 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
                 p->pkt_eos = mpp_packet_get_eos(packet);
 
                 if (p->fp_output)
-                    fwrite(ptr, 1, len, p->fp_output);
+                    fwrite(ptr, 1, len, p->fp_output);//write video data
                 mpp_packet_deinit(&packet);
 
                 mpp_log_f("encoded frame %d size %d\n", p->frame_count, len);
@@ -876,6 +913,11 @@ MPP_RET test_mpp_deinit(MpiEncTestData *p)
     return MPP_OK;
 }
 
+/**
+ * run encode process
+ * @param cmd
+ * @return 
+ */
 int mpi_enc_test(MpiEncTestCmd *cmd)
 {
     MPP_RET ret = MPP_OK;
@@ -884,12 +926,14 @@ int mpi_enc_test(MpiEncTestCmd *cmd)
     mpp_log("mpi_enc_test start\n");
 
     ret = test_ctx_init(&p, cmd);
+    mpp_log("ctx init %d\n", ret);
     if (ret) {
         mpp_err_f("test data init failed ret %d\n", ret);
         goto MPP_TEST_OUT;
     }
 
     ret = test_res_init(p);
+    mpp_log("res init %d\n", ret);
     if (ret) {
         mpp_err_f("test resource init failed ret %d\n", ret);
         goto MPP_TEST_OUT;
@@ -900,18 +944,21 @@ int mpi_enc_test(MpiEncTestCmd *cmd)
 
     // encoder demo
     ret = test_mpp_init(p);
+    mpp_log("mpp init %d\n", ret);
     if (ret) {
         mpp_err_f("test mpp init failed ret %d\n", ret);
         goto MPP_TEST_OUT;
     }
 
     ret = test_mpp_setup(p);
+    mpp_log("mpp setup %d\n", ret);
     if (ret) {
         mpp_err_f("test mpp setup failed ret %d\n", ret);
         goto MPP_TEST_OUT;
     }
 
     ret = test_mpp_preprare(p);
+    mpp_log("mpp prepare %d\n", ret);
     if (ret) {
         mpp_err_f("test mpp prepare failed ret %d\n", ret);
         goto MPP_TEST_OUT;
@@ -954,9 +1001,9 @@ static void mpi_enc_test_help()
 }
 
 /**
- * 
- * @param argc
- * @param argv
+ * check options of command
+ * @param argc number of param
+ * @param argv input params
  * @param cmd
  * @return 
  */
@@ -1085,6 +1132,10 @@ PARSE_OPINIONS_OUT:
     return err;
 }
 
+/**
+ * show the result of options user typed
+ * @param cmd
+ */
 static void mpi_enc_test_show_options(MpiEncTestCmd* cmd)
 {
     mpp_log("cmd parse result:\n");
