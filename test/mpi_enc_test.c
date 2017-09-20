@@ -146,12 +146,12 @@ static MPP_RET read_yuv_image(RK_U8 *buf, MpiEncTestData *p)
     RK_U8 *buf_y = buf;
     RK_U8 *buf_u = buf_y + hor_stride * ver_stride; // NOTE: diff from gen_yuv_image
     RK_U8 *buf_v = buf_u + hor_stride * ver_stride / 4; // NOTE: diff from gen_yuv_image
-
+    RK_U32 read = 0;
     switch (fmt) {
     case MPP_FMT_YUV420SP : {
         for (row = 0; row < height; row++) {
             read_size = fread(buf_y + row * hor_stride, 1, width, fp);
-            mpp_log("read size %d\n", read_size);
+            read += read_size;
             if (read_size != width) {
                 mpp_err_f("read ori yuv file luma failed");
                 ret  = MPP_NOK;
@@ -161,7 +161,7 @@ static MPP_RET read_yuv_image(RK_U8 *buf, MpiEncTestData *p)
 
         for (row = 0; row < height / 2; row++) {
             read_size = fread(buf_u + row * hor_stride, 1, width, fp);
-            mpp_log("read size %d\n", read_size);
+            read += read_size;
             if (read_size != width) {
                 mpp_err_f("read ori yuv file cb failed");
                 ret  = MPP_NOK;
@@ -172,7 +172,7 @@ static MPP_RET read_yuv_image(RK_U8 *buf, MpiEncTestData *p)
     case MPP_FMT_YUV420P : {
         for (row = 0; row < height; row++) {
             read_size = fread(buf_y + row * hor_stride, 1, width, fp);
-            mpp_log("read size %d\n", read_size);
+            read += read_size;
             if (read_size != width) {
                 mpp_err_f("read ori yuv file luma failed");
                 ret  = MPP_NOK;
@@ -182,7 +182,8 @@ static MPP_RET read_yuv_image(RK_U8 *buf, MpiEncTestData *p)
 
         for (row = 0; row < height / 2; row++) {
             read_size = fread(buf_u + row * hor_stride / 2, 1, width / 2, fp);
-            mpp_log("read size %d\n", read_size);
+            read += read_size;
+            
             if (read_size != width / 2) {
                 mpp_err_f("read ori yuv file cb failed");
                 ret  = MPP_NOK;
@@ -192,6 +193,7 @@ static MPP_RET read_yuv_image(RK_U8 *buf, MpiEncTestData *p)
 
         for (row = 0; row < height / 2; row++) {
             read_size = fread(buf_v + row * hor_stride / 2, 1, width / 2, fp);
+            read += read_size;
             if (read_size != width / 2) {
                 mpp_err_f("read ori yuv file cr failed");
                 ret  = MPP_NOK;
@@ -204,7 +206,7 @@ static MPP_RET read_yuv_image(RK_U8 *buf, MpiEncTestData *p)
         ret = MPP_NOK;
     } break;
     }
-
+    mpp_log("read size %d\n", read);
 err:
 
     return ret;
@@ -822,7 +824,7 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
         mpp_task_meta_set_frame (task, KEY_INPUT_FRAME,  p->frame);
         mpp_task_meta_set_packet(task, KEY_OUTPUT_PACKET, packet);
         mpp_task_meta_set_buffer(task, KEY_MOTION_INFO, md_info_buf);
-
+        
         /* set idr frame */
 #if MPI_ENC_TEST_SET_IDR_FRAME
         if (p->frame_count && p->frame_count % (p->gop / 4) == 0) {
