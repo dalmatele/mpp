@@ -36,6 +36,7 @@ MPP_RET mpp_task_meta_set_s64(MppTask task, MppMetaKey key, RK_S64 val)
         return MPP_NOK;
 
     MppTaskImpl *impl = (MppTaskImpl *)task;
+    
     return mpp_meta_set_s64(impl->meta, key, val);
 }
 
@@ -54,6 +55,7 @@ MPP_RET mpp_task_meta_set_frame(MppTask task, MppMetaKey key, MppFrame frame)
         return MPP_NOK;
 
     MppTaskImpl *impl = (MppTaskImpl *)task;
+    mpp_log_f("task meta %d size %d\n", *((int*)impl->meta));
     return mpp_meta_set_frame(impl->meta, key, frame);
 }
 
@@ -63,6 +65,7 @@ MPP_RET mpp_task_meta_set_packet(MppTask task, MppMetaKey key, MppPacket packet)
         return MPP_NOK;
 
     MppTaskImpl *impl = (MppTaskImpl *)task;
+    mpp_log_f("packet meta %d size %d\n", *((int*)impl->meta));
     return mpp_meta_set_packet(impl->meta, key, packet);
 }
 
@@ -72,6 +75,7 @@ MPP_RET mpp_task_meta_set_buffer(MppTask task, MppMetaKey key, MppBuffer buffer)
         return MPP_NOK;
 
     MppTaskImpl *impl = (MppTaskImpl *)task;
+    mpp_log_f("buffer meta %d size %d\n", *((int*)impl->meta));
     return mpp_meta_set_buffer(impl->meta, key, buffer);
 }
 
@@ -129,6 +133,7 @@ MPP_RET mpp_task_meta_get_packet(MppTask task, MppMetaKey key, MppPacket *packet
         return MPP_NOK;
 
     MppTaskImpl *impl = (MppTaskImpl *)task;
+    mpp_log_f("get task meta %d size %d\n", *((int*)impl->meta));
     MPP_RET ret = mpp_meta_get_packet(impl->meta, key, packet);
     if (ret)
         *packet = NULL;
