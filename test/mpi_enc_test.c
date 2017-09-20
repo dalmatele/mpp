@@ -739,7 +739,7 @@ MPP_RET test_mpp_preprare(MpiEncTestData *p)
     if (packet) {
         void *ptr   = mpp_packet_get_pos(packet); //get position of packet
         size_t len  = mpp_packet_get_length(packet);//get valid data length of packet
-        mpp_log("found last frame. feof %lu\n", len);
+        mpp_log("header lenght %lu\n", len);
         if (p->fp_output)
             //write data is pointed by ptr, has size is 1 byte, we have len item, to file
             //we write global info to file
