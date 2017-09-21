@@ -134,6 +134,7 @@ MPP_RET h264e_deinit(void *ctx)
 
 MPP_RET h264e_encode(void *ctx, HalEncTask *task)
 {
+    mpp_log("Encode module \n");
     H264eCtx *p = (H264eCtx *)ctx;
     RcSyntax *rc_syn = &p->syntax;
     MppEncCfgSet *cfg = p->cfg;
