@@ -878,10 +878,10 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
 
                 p->pkt_eos = mpp_packet_get_eos(packet);
                 
-                for(j = 0; j < 32; j++){
-                    mpp_log_f("%d ", *((uint8_t*)ptr + j));       
-                }
-                mpp_log_f("\n===============\n");
+//                for(j = 0; j < 32; j++){
+//                    mpp_log_f("%d ", *((uint8_t*)ptr + j));       
+//                }
+//                mpp_log_f("\n===============\n");
                 if (p->fp_output)
                     fwrite(ptr, 1, len, p->fp_output);//write video data
                 mpp_packet_deinit(&packet);
