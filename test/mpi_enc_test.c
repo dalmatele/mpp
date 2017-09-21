@@ -878,7 +878,7 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
 
                 p->pkt_eos = mpp_packet_get_eos(packet);
                 
-                for(i = 0; j < 32; j++){
+                for(j = 0; j < 32; j++){
                     mpp_log_f("%d ", *((uint8_t*)ptr + j));       
                 }
                 mpp_log_f("\n===============\n");
