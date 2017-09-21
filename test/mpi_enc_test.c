@@ -28,6 +28,7 @@
 #include "mpp_log.h"
 #include "mpp_time.h"
 #include "mpp_common.h"
+#include "stdio.h"
 
 #include "utils.h"
 
@@ -805,7 +806,10 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
             if (ret)
                 goto RET;
         }
-
+        for(j = 0; j < 32; j++){
+            printf("%d ", *((uint8_t*)buf + j));
+        }
+        mpp_log_f("\n===============\n");
         mpp_frame_set_buffer(p->frame, frm_buf_in);
         mpp_frame_set_eos(p->frame, p->frm_eos);
 
@@ -880,7 +884,7 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
                 p->pkt_eos = mpp_packet_get_eos(packet);
                 
                 for(j = 0; j < 32; j++){
-                    mpp_log_f("%d ", *((uint8_t*)ptr + j));       
+                    printf("%d ", *((uint8_t*)ptr + j));
                 }
                 mpp_log_f("\n===============\n");
                 if (p->fp_output)
