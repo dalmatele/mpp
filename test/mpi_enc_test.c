@@ -759,6 +759,7 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
     MppCtx ctx;
     MppPacket packet = NULL;
     RK_S32 i;
+    int j;
 
     if (NULL == p)
         return MPP_ERR_NULL_PTR;
@@ -876,7 +877,11 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
                 size_t len  = mpp_packet_get_length(packet);
 
                 p->pkt_eos = mpp_packet_get_eos(packet);
-
+                
+                for(i = 0; j < 32; j++){
+                    mpp_log_f("%d ", *((uint8_t*)ptr + j));       
+                }
+                mpp_log_f("\n===============\n");
                 if (p->fp_output)
                     fwrite(ptr, 1, len, p->fp_output);//write video data
                 mpp_packet_deinit(&packet);
