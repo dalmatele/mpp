@@ -342,6 +342,7 @@ MPP_RET test_ctx_init(MpiEncTestData **data, MpiEncTestCmd *cmd)
     p->width        = cmd->width;
     p->height       = cmd->height;
     p->hor_stride   = MPP_ALIGN(cmd->width, 16);
+    mpp_log("hor stride %d \n", p->hor_stride);
     p->ver_stride   = MPP_ALIGN(cmd->height, 16);
     p->fmt          = cmd->format;
     p->type         = cmd->type;

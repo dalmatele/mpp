@@ -819,6 +819,7 @@ MPP_RET h264e_vpu_update_hw_cfg(H264eHalContext *ctx, HalEncTask *task,
             hw_cfg->height  = prep->height;
 
             // for libvpu, 8-pixel alignment is enough
+            mpp_log("hor stride %d - %d \n", prep->hor_stride, MPP_ALIGN(prep->width, 8));
             mpp_assert(prep->hor_stride == MPP_ALIGN(prep->width, 8));
             mpp_assert(prep->ver_stride == MPP_ALIGN(prep->height, 8));
 
