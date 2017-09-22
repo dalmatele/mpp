@@ -83,6 +83,7 @@ RK_S32 mpp_device_init(MppDevCtx *ctx, MppCtxType coding, MppCodingType type)
             ctx->client_type = client_type;
 
             RK_S32 ret = ioctl(dev, VPU_IOC_SET_CLIENT_TYPE, client_type);
+            mpp_log("Init device %u \n", ret);
             if (ret) {
                 mpp_err_f("ioctl VPU_IOC_SET_CLIENT_TYPE failed ret %d errno %d\n",
                           ret, errno);
