@@ -2179,7 +2179,7 @@ MPP_RET hal_h264e_rkv_init(void *hal, MppHalCfg *cfg)
     }
 
     h264e_hal_leave();
-
+    mpp_log("hal_h264e_rkv function \n");
     return MPP_OK;
 }
 
