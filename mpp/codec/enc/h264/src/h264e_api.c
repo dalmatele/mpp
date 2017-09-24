@@ -160,12 +160,12 @@ MPP_RET h264e_encode(void *ctx, HalEncTask *task)
     task->syntax.number = 1;
     task->valid = 1;
     task->is_intra = (p->rc->cur_frmtype == INTRA_FRAME) ? (1) : (0);
-    ret = task->flags.err;
-    MppBuffer input = task->output;
-    for(j = 0; j < 32; j++){
-        printf("%d ", *((uint8_t*)input + j));
-    }
-    mpp_log_f("\n=======read-2 %lu========\n", ret);
+//    ret = task->flags.err;
+//    MppBuffer input = task->output;
+//    for(j = 0; j < 32; j++){
+//        printf("%d ", *((uint8_t*)input + j));
+//    }
+//    mpp_log_f("\n=======read-2 %lu========\n", ret);
     h264e_dbg_func("leave\n");
 
     return MPP_OK;

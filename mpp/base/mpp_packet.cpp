@@ -70,7 +70,7 @@ MPP_RET mpp_packet_init(MppPacket *packet, void *data, size_t size)
     MppPacketImpl *p = (MppPacketImpl *)*packet;
     p->data = p->pos    = data;
     p->size = p->length = size;
-
+    mpp_log("Packet \n");
     return MPP_OK;
 }
 
@@ -194,6 +194,11 @@ void mpp_packet_set_pos(MppPacket packet, void *pos)
     mpp_assert(p->size >= p->length);
 }
 
+/**
+ * Get position of packet
+ * @param packet
+ * @return 
+ */
 void *mpp_packet_get_pos(const MppPacket packet)
 {
     if (check_is_mpp_packet(packet))
