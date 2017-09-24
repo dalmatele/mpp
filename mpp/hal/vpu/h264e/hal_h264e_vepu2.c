@@ -784,7 +784,7 @@ MPP_RET hal_h264e_vepu2_control(void *hal, RK_S32 cmd_type, void *param)
 {
     H264eHalContext *ctx = (H264eHalContext *)hal;
     h264e_hal_enter();
-
+    mpp_log("ducla-hal-h264-vepu2: vpu 2 \n");
     h264e_hal_dbg(H264E_DBG_DETAIL, "h264e_vpu_control cmd 0x%x, info %p", cmd_type, param);
     switch (cmd_type) {
     case MPP_ENC_SET_EXTRA_INFO: {
