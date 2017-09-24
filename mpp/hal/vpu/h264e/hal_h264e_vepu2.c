@@ -788,9 +788,11 @@ MPP_RET hal_h264e_vepu2_control(void *hal, RK_S32 cmd_type, void *param)
     h264e_hal_dbg(H264E_DBG_DETAIL, "h264e_vpu_control cmd 0x%x, info %p", cmd_type, param);
     switch (cmd_type) {
     case MPP_ENC_SET_EXTRA_INFO: {
+        mpp_log("ducla-hal-h264-vepu2: set extra info \n");
         break;
     }
     case MPP_ENC_GET_EXTRA_INFO: {
+        mpp_log("ducla-hal-h264-vepu2: get extra info \n");
         MppPacket  pkt      = ctx->packeted_param;
         MppPacket *pkt_out  = (MppPacket *)param;
 
@@ -822,6 +824,7 @@ MPP_RET hal_h264e_vepu2_control(void *hal, RK_S32 cmd_type, void *param)
     }
 
     case MPP_ENC_SET_PREP_CFG : {
+        mpp_log("ducla-hal-h264-vepu2: set prep config \n");
         MppEncPrepCfg *set = &ctx->set->prep;
         RK_U32 change = set->change;
         MPP_RET ret = MPP_NOK;
@@ -848,9 +851,11 @@ MPP_RET hal_h264e_vepu2_control(void *hal, RK_S32 cmd_type, void *param)
         }
     } break;
     case MPP_ENC_SET_RC_CFG : {
+        mpp_log("ducla-hal-h264-vepu2: set rc config \n");
         // TODO: do rate control check here
     } break;
     case MPP_ENC_SET_CODEC_CFG : {
+        mpp_log("ducla-hal-h264-vepu2: set codec config \n");
         MppEncH264Cfg *src = &ctx->set->codec.h264;
         MppEncH264Cfg *dst = &ctx->cfg->codec.h264;
         RK_U32 change = src->change;
@@ -913,9 +918,11 @@ MPP_RET hal_h264e_vepu2_control(void *hal, RK_S32 cmd_type, void *param)
 
     case MPP_ENC_SET_OSD_PLT_CFG:
     case MPP_ENC_SET_OSD_DATA_CFG: {
+        mpp_log("ducla-hal-h264-vepu2: set osd data \n");
         break;
     }
     case MPP_ENC_SET_SEI_CFG: {
+        mpp_log("ducla-hal-h264-vepu2: set sei config \n");
         ctx->sei_mode = *((MppEncSeiMode *)param);
         break;
     }
