@@ -195,6 +195,7 @@ typedef struct MppApi_t {
      * @brief poll port for dequeue
      * @param ctx The context of mpp
      * @param type input port or output port which are both for data transaction
+     * @param timeout block, non-block or block with timeout
      * @return 0 for success there is valid task for dequeue, others for failure
      */
     MPP_RET (*poll)(MppCtx ctx, MppPortType type, MppPollType timeout);

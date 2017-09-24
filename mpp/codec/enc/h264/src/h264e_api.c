@@ -163,7 +163,7 @@ MPP_RET h264e_encode(void *ctx, HalEncTask *task)
     for(j = 0; j < 32; j++){
         printf("%d ", *((uint8_t*)input + j));
     }
-    mpp_log_f("\n===============\n");
+    mpp_log_f("\n=======read-2========\n");
     h264e_dbg_func("leave\n");
 
     return MPP_OK;

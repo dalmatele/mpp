@@ -806,10 +806,10 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
             if (ret)
                 goto RET;
         }
-//        for(j = 0; j < 32; j++){
-//            printf("%d ", *((uint8_t*)buf + j));
-//        }
-//        mpp_log_f("\n===============\n");
+        for(j = 0; j < 32; j++){
+            printf("%d ", *((uint8_t*)buf + j));
+        }
+        mpp_log_f("\n===============\n");
         mpp_frame_set_buffer(p->frame, frm_buf_in);
         mpp_frame_set_eos(p->frame, p->frm_eos);
 
