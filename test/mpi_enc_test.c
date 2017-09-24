@@ -809,7 +809,7 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
         for(j = 0; j < 32; j++){
             printf("%d ", *((uint8_t*)buf + j));
         }
-        mpp_log_f("\n===============\n");
+        mpp_log_f("\n=======read========\n");
         mpp_frame_set_buffer(p->frame, frm_buf_in);
         mpp_frame_set_eos(p->frame, p->frm_eos);
 
