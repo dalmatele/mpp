@@ -207,7 +207,7 @@ static MPP_RET read_yuv_image(RK_U8 *buf, MpiEncTestData *p)
         ret = MPP_NOK;
     } break;
     }
-    mpp_log("read size %d\n", read);
+//    mpp_log("read size %d\n", read);
 err:
 
     return ret;
@@ -343,7 +343,7 @@ MPP_RET test_ctx_init(MpiEncTestData **data, MpiEncTestCmd *cmd)
     p->width        = cmd->width;
     p->height       = cmd->height;
     p->hor_stride   = MPP_ALIGN(cmd->width, 16);
-    mpp_log("hor stride %d \n", p->hor_stride);
+//    mpp_log("hor stride %d \n", p->hor_stride);
     p->ver_stride   = MPP_ALIGN(cmd->height, 16);
     p->fmt          = cmd->format;
     p->type         = cmd->type;
@@ -424,14 +424,14 @@ MPP_RET test_res_init(MpiEncTestData *p)
 
     //see mpp_buffer.h
     ret = mpp_buffer_group_get_internal(&p->frm_grp, MPP_BUFFER_TYPE_ION);
-    mpp_log("buffer for frm_grp %d\n", ret);
+//    mpp_log("buffer for frm_grp %d\n", ret);
     if (ret) {
         mpp_err("failed to get buffer group for input frame ret %d\n", ret);
         goto RET;
     }
     //see more about MPP_BUFFER_TYPE_ION in mpp_buffer.cpp
     ret = mpp_buffer_group_get_internal(&p->pkt_grp, MPP_BUFFER_TYPE_ION);
-    mpp_log("buffer for pkt_grp %d\n", ret);
+//    mpp_log("buffer for pkt_grp %d\n", ret);
     if (ret) {
         mpp_err("failed to get buffer group for output packet ret %d\n", ret);
         goto RET;
@@ -440,30 +440,30 @@ MPP_RET test_res_init(MpiEncTestData *p)
     for (i = 0; i < MPI_ENC_IO_COUNT; i++) {
         //link frm_buff to frm_grp buffer
         ret = mpp_buffer_get(p->frm_grp, &p->frm_buf[i], p->frame_size);
-        mpp_log("buffer for frm_buf %d\n", ret);
+//        mpp_log("buffer for frm_buf %d\n", ret);
         if (ret) {
             mpp_err("failed to get buffer for input frame ret %d\n", ret);
             goto RET;
         }
 
         ret = mpp_buffer_get(p->frm_grp, &p->osd_idx_buf[i], p->osd_idx_size);
-        mpp_log("buffer for osd_idx_buf %d\n", ret);
+//        mpp_log("buffer for osd_idx_buf %d\n", ret);
         if (ret) {
-            mpp_err("failed to get buffer for osd idx buf ret %d\n", ret);
+//            mpp_err("failed to get buffer for osd idx buf ret %d\n", ret);
             goto RET;
         }
 
         ret = mpp_buffer_get(p->pkt_grp, &p->pkt_buf[i], p->packet_size);
-        mpp_log("buffer for pkt_grp %d\n", ret);
+//        mpp_log("buffer for pkt_grp %d\n", ret);
         if (ret) {
-            mpp_err("failed to get buffer for input frame ret %d\n", ret);
+//            mpp_err("failed to get buffer for input frame ret %d\n", ret);
             goto RET;
         }
 
         ret = mpp_buffer_get(p->pkt_grp, &p->md_buf[i], p->mdinfo_size);
-        mpp_log("buffer for md_buf %d\n", ret);
+//        mpp_log("buffer for md_buf %d\n", ret);
         if (ret) {
-            mpp_err("failed to get buffer for motion detection info ret %d\n", ret);
+//            mpp_err("failed to get buffer for motion detection info ret %d\n", ret);
             goto RET;
         }
     }
@@ -741,7 +741,7 @@ MPP_RET test_mpp_preprare(MpiEncTestData *p)
     if (packet) {
         void *ptr   = mpp_packet_get_pos(packet); //get position of packet
         size_t len  = mpp_packet_get_length(packet);//get valid data length of packet
-        mpp_log("header lenght %lu\n", len);
+//        mpp_log("header lenght %lu\n", len);
         if (p->fp_output)
             //write data is pointed by ptr, has size is 1 byte, we have len item, to file
             //we write global info to file
@@ -806,10 +806,10 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
             if (ret)
                 goto RET;
         }
-        for(j = 0; j < 32; j++){
-            printf("%d ", *((uint8_t*)buf + j));
-        }
-        mpp_log_f("\n===============\n");
+//        for(j = 0; j < 32; j++){
+//            printf("%d ", *((uint8_t*)buf + j));
+//        }
+//        mpp_log_f("\n===============\n");
         mpp_frame_set_buffer(p->frame, frm_buf_in);
         mpp_frame_set_eos(p->frame, p->frm_eos);
 
@@ -883,10 +883,10 @@ MPP_RET test_mpp_run(MpiEncTestData *p)
 
                 p->pkt_eos = mpp_packet_get_eos(packet);
                 
-                for(j = 0; j < 32; j++){
-                    printf("%d ", *((uint8_t*)ptr + j));
-                }
-                mpp_log_f("\n===============\n");
+//                for(j = 0; j < 32; j++){
+//                    printf("%d ", *((uint8_t*)ptr + j));
+//                }
+//                mpp_log_f("\n===============\n");
                 if (p->fp_output)
                     fwrite(ptr, 1, len, p->fp_output);//write video data
                 mpp_packet_deinit(&packet);

@@ -135,6 +135,7 @@ MPP_RET h264e_deinit(void *ctx)
 MPP_RET h264e_encode(void *ctx, HalEncTask *task)
 {
     mpp_log("Encode module \n");
+    int j;
     H264eCtx *p = (H264eCtx *)ctx;
     RcSyntax *rc_syn = &p->syntax;
     MppEncCfgSet *cfg = p->cfg;
@@ -158,7 +159,11 @@ MPP_RET h264e_encode(void *ctx, HalEncTask *task)
     task->syntax.number = 1;
     task->valid = 1;
     task->is_intra = (p->rc->cur_frmtype == INTRA_FRAME) ? (1) : (0);
-
+    MppBuffer input = task->input;
+    for(j = 0; j < 32; j++){
+        printf("%d ", *((uint8_t*)input + j));
+    }
+    mpp_log_f("\n===============\n");
     h264e_dbg_func("leave\n");
 
     return MPP_OK;
