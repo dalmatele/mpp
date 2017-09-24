@@ -1590,6 +1590,7 @@ static RK_U8 *h264e_rkv_nal_escape_c(RK_U8 *dst, RK_U8 *src, RK_U8 *end)
 
 static void h264e_rkv_nal_encode(RK_U8 *dst, H264eRkvNal *nal)
 {
+    mpp_log("ducla-hal_h264e_rkv:Encode module \n");
     RK_S32 b_annexb = 1;
     RK_S32 size = 0;
     RK_U8 *src = nal->p_payload;
@@ -2179,7 +2180,6 @@ MPP_RET hal_h264e_rkv_init(void *hal, MppHalCfg *cfg)
     }
 
     h264e_hal_leave();
-    mpp_log("hal_h264e_rkv function \n");
     return MPP_OK;
 }
 
