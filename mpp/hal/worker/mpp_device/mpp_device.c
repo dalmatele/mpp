@@ -21,6 +21,7 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include "linux/types.h"
 
 #include "mpp_env.h"
 #include "mpp_log.h"
@@ -29,14 +30,14 @@
 #include "mpp_platform.h"
 
 #include "vpu.h"
-
+//https://stackoverflow.com/questions/22496123/what-is-the-meaning-of-this-macro-iormy-macig-0-int
 #define VPU_IOC_MAGIC                       'l'
 
-#define VPU_IOC_SET_CLIENT_TYPE             _IOW(VPU_IOC_MAGIC, 1, unsigned long)
-#define VPU_IOC_GET_HW_FUSE_STATUS          _IOW(VPU_IOC_MAGIC, 2, unsigned long)
-#define VPU_IOC_SET_REG                     _IOW(VPU_IOC_MAGIC, 3, unsigned long)
-#define VPU_IOC_GET_REG                     _IOW(VPU_IOC_MAGIC, 4, unsigned long)
-#define VPU_IOC_PROBE_IOMMU_STATUS          _IOR(VPU_IOC_MAGIC, 5, unsigned long)
+#define VPU_IOC_SET_CLIENT_TYPE             _IOW(VPU_IOC_MAGIC, 1, u32)
+#define VPU_IOC_GET_HW_FUSE_STATUS          _IOW(VPU_IOC_MAGIC, 2, u32)
+#define VPU_IOC_SET_REG                     _IOW(VPU_IOC_MAGIC, 3, u32)
+#define VPU_IOC_GET_REG                     _IOW(VPU_IOC_MAGIC, 4, u32)
+#define VPU_IOC_PROBE_IOMMU_STATUS          _IOR(VPU_IOC_MAGIC, 5, u32)
 #define VPU_IOC_WRITE(nr, size)             _IOC(_IOC_WRITE, VPU_IOC_MAGIC, (nr), (size))
 
 typedef struct MppReq_t {
