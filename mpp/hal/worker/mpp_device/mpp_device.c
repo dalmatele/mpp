@@ -33,11 +33,11 @@
 //https://github.com/dalmatele/kernel/blob/release-4.4/drivers/video/rockchip/vpu/mpp_dev_common.c
 #define VPU_IOC_MAGIC                       'l'
 
-#define VPU_IOC_SET_CLIENT_TYPE             _IOW(VPU_IOC_MAGIC, 1, unsigned int)
-#define VPU_IOC_GET_HW_FUSE_STATUS          _IOW(VPU_IOC_MAGIC, 2, unsigned int)
-#define VPU_IOC_SET_REG                     _IOW(VPU_IOC_MAGIC, 3, unsigned int)
-#define VPU_IOC_GET_REG                     _IOW(VPU_IOC_MAGIC, 4, unsigned int)
-#define VPU_IOC_PROBE_IOMMU_STATUS          _IOR(VPU_IOC_MAGIC, 5, unsigned int)
+#define VPU_IOC_SET_CLIENT_TYPE             _IOW(VPU_IOC_MAGIC, 1, unsigned long)
+#define VPU_IOC_GET_HW_FUSE_STATUS          _IOW(VPU_IOC_MAGIC, 2, unsigned long)
+#define VPU_IOC_SET_REG                     _IOW(VPU_IOC_MAGIC, 3, unsigned long)
+#define VPU_IOC_GET_REG                     _IOW(VPU_IOC_MAGIC, 4, unsigned long)
+#define VPU_IOC_PROBE_IOMMU_STATUS          _IOR(VPU_IOC_MAGIC, 5, unsigned long)
 #define VPU_IOC_WRITE(nr, size)             _IOC(_IOC_WRITE, VPU_IOC_MAGIC, (nr), (size))
 
 typedef struct MppReq_t {
@@ -78,6 +78,7 @@ RK_S32 mpp_device_init(MppDevCtx *ctx, MppCtxType coding, MppCodingType type)
     else
         name = mpp_get_vcodec_dev_name(coding, type);
     if (name) {
+        mpp_log("Device name: %s", name);
         dev = open(name, O_RDWR);
         if (dev > 0) {
             RK_S32 client_type = mpp_device_get_client_type(ctx, coding, type);
