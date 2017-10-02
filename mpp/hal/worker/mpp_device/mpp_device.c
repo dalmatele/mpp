@@ -83,9 +83,8 @@ RK_S32 mpp_device_init(MppDevCtx *ctx, MppCtxType coding, MppCodingType type)
         if (dev > 0) {
             RK_S32 client_type = mpp_device_get_client_type(ctx, coding, type);
             ctx->client_type = client_type;
-            mpp_log("Device name: %ul", VPU_IOC_SET_CLIENT_TYPE);
+            mpp_log("ioctl: %ul", VPU_IOC_SET_CLIENT_TYPE);
             RK_S32 ret = ioctl(dev, VPU_IOC_SET_CLIENT_TYPE, client_type);
-            mpp_log("Init device %u \n", ret);
             if (ret) {
                 mpp_err_f("ioctl VPU_IOC_SET_CLIENT_TYPE failed ret %d errno %d\n",
                           ret, errno);
@@ -125,7 +124,9 @@ MPP_RET mpp_device_send_reg(RK_S32 dev, RK_U32 *regs, RK_U32 nregs)
     nregs *= sizeof(RK_U32);
     req.req     = regs;
     req.size    = nregs;
+    
     ret = (RK_S32)ioctl(dev, VPU_IOC_SET_REG, &req);
+    mpp_log("ioctl: %ul - %d", VPU_IOC_SET_REG, ret);
     if (ret) {
         mpp_err_f("ioctl VPU_IOC_SET_REG failed ret %d errno %d %s\n",
                   ret, errno, strerror(errno));
@@ -145,6 +146,7 @@ MPP_RET mpp_device_wait_reg(RK_S32 dev, RK_U32 *regs, RK_U32 nregs)
     req.size    = nregs;
 
     ret = (RK_S32)ioctl(dev, VPU_IOC_GET_REG, &req);
+    mpp_log("ioctl: %ul - %d", VPU_IOC_GET_REG, ret);
     if (ret) {
         mpp_err_f("ioctl VPU_IOC_GET_REG failed ret %d errno %d %s\n",
                   ret, errno, strerror(errno));
@@ -174,6 +176,8 @@ MPP_RET mpp_device_send_reg_with_id(RK_S32 dev, RK_S32 id, void *param,
     }
 
     ret = (RK_S32)ioctl(dev, VPU_IOC_WRITE(id, size), param);
+    mpp_log("ioctl: %ul - %d", VPU_IOC_GET_REG, ret);
+    mpp_log("ioctl: %ul - %d", VPU_IOC_WRITE, ret);
     if (ret) {
         mpp_err_f("ioctl VPU_IOC_WRITE failed ret %d errno %d %s\n",
                   ret, errno, strerror(errno));
