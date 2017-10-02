@@ -133,7 +133,7 @@ MPP_RET mpp_task_meta_get_packet(MppTask task, MppMetaKey key, MppPacket *packet
         return MPP_NOK;
 
     MppTaskImpl *impl = (MppTaskImpl *)task;
-    mpp_log_f("get task meta %d\n", *((int*)impl->meta));
+//    mpp_log_f("get task meta %d\n", *((int*)impl->meta));
     MPP_RET ret = mpp_meta_get_packet(impl->meta, key, packet);
     if (ret)
         *packet = NULL;
