@@ -28,6 +28,14 @@
 #include "mpp_device.h"
 #include "mpp_platform.h"
 #include <linux/types.h>
+#include <linux/cdev.h>
+#include <linux/dma-buf.h>
+#include <linux/rockchip_ion.h>
+#include <linux/rockchip-iovmm.h>
+#include <linux/types.h>
+#include <linux/workqueue.h>
+#include <linux/wakelock.h>
+
 
 #include "vpu.h"
 //https://stackoverflow.com/questions/22496123/what-is-the-meaning-of-this-macro-iormy-macig-0-int
