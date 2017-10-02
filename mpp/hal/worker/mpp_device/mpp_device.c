@@ -38,7 +38,7 @@
 #define VPU_IOC_SET_REG                     _IOW(VPU_IOC_MAGIC, 3, unsigned long)
 #define VPU_IOC_GET_REG                     _IOW(VPU_IOC_MAGIC, 4, unsigned long)
 #define VPU_IOC_PROBE_IOMMU_STATUS          _IOR(VPU_IOC_MAGIC, 5, unsigned long)
-#define VPU_TEST                            _IOR(VPU_IOC_MAGIC, 6, u32);
+#define VPU_TEST                            _IOR(VPU_IOC_MAGIC, 6, u32)
 #define VPU_IOC_WRITE(nr, size)             _IOC(_IOC_WRITE, VPU_IOC_MAGIC, (nr), (size))
 
 typedef struct MppReq_t {
