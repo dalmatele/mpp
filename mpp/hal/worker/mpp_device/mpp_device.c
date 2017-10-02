@@ -27,6 +27,7 @@
 
 #include "mpp_device.h"
 #include "mpp_platform.h"
+#include <linux/types.h>
 
 #include "vpu.h"
 //https://stackoverflow.com/questions/22496123/what-is-the-meaning-of-this-macro-iormy-macig-0-int
