@@ -27,6 +27,7 @@
 
 #include "mpp_device.h"
 #include "mpp_platform.h"
+#include "linux/types.h"
 
 
 #include "vpu.h"
