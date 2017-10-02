@@ -28,7 +28,7 @@
 #include "mpp_device.h"
 #include "mpp_platform.h"
 #include <linux/types.h>
-#include <linux/cdev.h>
+//#include <linux/cdev.h>
 #include <linux/dma-buf.h>
 #include <linux/rockchip_ion.h>
 #include <linux/rockchip-iovmm.h>
