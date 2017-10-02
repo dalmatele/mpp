@@ -38,6 +38,7 @@
 #define VPU_IOC_SET_REG                     _IOW(VPU_IOC_MAGIC, 3, unsigned long)
 #define VPU_IOC_GET_REG                     _IOW(VPU_IOC_MAGIC, 4, unsigned long)
 #define VPU_IOC_PROBE_IOMMU_STATUS          _IOR(VPU_IOC_MAGIC, 5, unsigned long)
+#define VPU_TEST                            _IOR(VPU_IOC_MAGIC, 6, u32);
 #define VPU_IOC_WRITE(nr, size)             _IOC(_IOC_WRITE, VPU_IOC_MAGIC, (nr), (size))
 
 typedef struct MppReq_t {
@@ -83,7 +84,7 @@ RK_S32 mpp_device_init(MppDevCtx *ctx, MppCtxType coding, MppCodingType type)
         if (dev > 0) {
             RK_S32 client_type = mpp_device_get_client_type(ctx, coding, type);
             ctx->client_type = client_type;
-            mpp_log("mpp_device_init: %x", VPU_IOC_SET_CLIENT_TYPE);
+            mpp_log("mpp_device_init: %x", VPU_TEST);
             RK_S32 ret = ioctl(dev, VPU_IOC_SET_CLIENT_TYPE, client_type);
             if (ret) {
                 mpp_err_f("ioctl VPU_IOC_SET_CLIENT_TYPE failed ret %d errno %d\n",
