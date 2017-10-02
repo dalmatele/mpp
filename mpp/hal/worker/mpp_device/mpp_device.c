@@ -177,7 +177,7 @@ MPP_RET mpp_device_send_reg_with_id(RK_S32 dev, RK_S32 id, void *param,
 
     ret = (RK_S32)ioctl(dev, VPU_IOC_WRITE(id, size), param);
     mpp_log("ioctl: %ul - %d", VPU_IOC_GET_REG, ret);
-    mpp_log("ioctl: %ul - %d", VPU_IOC_WRITE((id, size)), ret);
+    mpp_log("ioctl: %ul - %d", VPU_IOC_WRITE(id, size), ret);
     if (ret) {
         mpp_err_f("ioctl VPU_IOC_WRITE failed ret %d errno %d %s\n",
                   ret, errno, strerror(errno));
